@@ -29,6 +29,7 @@ function getStyles(props, state) {
     primary,
     secondary,
     style,
+    backgroundHighlight
   } = props;
 
   const amount = (primary || secondary) ? 0.4 : 0.08;
@@ -69,7 +70,7 @@ function getStyles(props, state) {
       overflow: 'hidden',
       borderRadius: 2,
       transition: Transitions.easeOut(),
-      backgroundColor: backgroundColor,
+      backgroundColor: state.hovered && backgroundHighlight && ColorManipulator.fade(backgroundColor, amount),
     },
     label: {
       position: 'relative',
@@ -87,7 +88,7 @@ function getStyles(props, state) {
       color: labelColor,
     },
     overlay: {
-      backgroundColor: state.hovered && !disabled && ColorManipulator.fade(labelColor, amount),
+      backgroundColor: state.hovered && !backgroundHighlight && !disabled && ColorManipulator.fade(labelColor, amount),
       transition: Transitions.easeOut(),
       top: 0,
     },
@@ -230,7 +231,11 @@ const RaisedButton = React.createClass({
      * The primary prop has precendent if set to true.
      */
     secondary: React.PropTypes.bool,
-
+    /**
+     * If true, colors button according to secondaryTextColor from the theme.
+     * The primary prop has precendent if set to true.
+     */
+    backgroundHighlight: React.PropTypes.bool,
     /**
      * Override the inline-styles of the root element.
      */
@@ -252,6 +257,7 @@ const RaisedButton = React.createClass({
       fullWidth: false,
       primary: false,
       secondary: false,
+      backgroundHighlight: false,
     };
   },
 
@@ -343,6 +349,7 @@ const RaisedButton = React.createClass({
       primary,
       rippleStyle,
       secondary,
+      backgroundHighlight,
       ...other,
     } = this.props;
 
